@@ -44,7 +44,53 @@ function moveToXY(from, to, speed, gaps) {
   return console.log(gapsCoordinates);
 }
 
-moveToXY({ x: 1, y: 1 }, { x: 8, y: 10 }, 3, 10);
+moveToXY({ x: -1, y: -1 }, { x: -10, y: -10 }, 3, 10);
+
+//same to moveToXY
+function moveToXY2(from, to, speed, gaps) {
+  if (speed === 0) return console.log("smth went wrong");
+
+  const sumSqrt = Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2);
+  const S = +Math.sqrt(sumSqrt).toFixed(2); // distance
+  const T = +(S / speed).toFixed(2); // time
+  const cosAngul = (to.x - from.x) / S; // cosinus
+  const sinAngul = (to.y - from.y) / S; // sinus
+  const gapsCoordinates = [];
+
+  for (let i = 1; i <= gaps; i++) {
+    const tGap = +(T * (i / gaps)).toFixed(2); // time in interval
+    const distanseGap = speed * tGap;
+    const xGap = +(distanseGap * cosAngul + from.x).toFixed(2);
+    const yGap = +(distanseGap * sinAngul + from.y).toFixed(2);
+    gapsCoordinates.push(new Coordinates(tGap, xGap, yGap));
+  }
+  return console.log(gapsCoordinates);
+}
+
+moveToXY2({ x: -1, y: -1 }, { x: -10, y: -10 }, 3, 10);
+
+// conversion to radians
+function degToRad(deg) {
+  return deg * (Math.PI / 180.0);
+}
+
+// method with acceleration
+function moveToAcceleration(from, speed, gaps, acc, angul, time) {
+  if (speed === 0) return console.log("smth went wrong");
+
+  const gapsCoordinates = [];
+
+  for (let i = 1; i <= gaps; i++) {
+    const tGap = +(time * (i / gaps)).toFixed(2); // time in interval
+    const distanseGap = speed * tGap + (acc * Math.pow(tGap, 2)) / 2; // acceleration formula
+    const xGap = +(distanseGap * Math.cos(degToRad(angul)) + from.x).toFixed(2); // coordinate by OX
+    const yGap = +(distanseGap * Math.sin(degToRad(angul)) + from.y).toFixed(2); // coordinate by OY
+    gapsCoordinates.push(new Coordinates(tGap, xGap, yGap));
+  }
+
+  return console.log(gapsCoordinates);
+}
+moveToAcceleration({ x: 1, y: 1 }, 1, 10, 1, 45, 10);
 
 /////////////////////// Task 2 //////////////////////////////
 
